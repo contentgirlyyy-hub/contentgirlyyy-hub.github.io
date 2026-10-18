@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>UGC Creator Portfolio</title>
+<style>
+  :root {
+    --bg: #f6f0ff;
+    --surface: #ffffff;
+    --ink: #2b0f55;
+    --muted: #6a5690;
+    --purple: #5b21b6;
+    --purple-deep: #3b1272;
+    --orange: #ff7a1a;
+    --orange-soft: #ffb36b;
+    --on-orange: #2b0f55;
+    --line: #2b0f55;
+    color-scheme: light;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1a0a35;
+      --surface: #2a1352;
+      --ink: #fdf1e6;
+      --muted: #c9b6ee;
+      --purple: #9d6bff;
+      --purple-deep: #12062a;
+      --orange: #ff8a2e;
+      --orange-soft: #ffb36b;
+      --on-orange: #1a0a35;
+      --line: #fdf1e6;
+      color-scheme: dark;
+    }
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg); color: var(--ink);
+    font-family: "Avenir Next", "Segoe UI", system-ui, -apple-system, Roboto, sans-serif;
+    line-height: 1.6; -webkit-font-smoothing: antialiased; overflow-x: hidden;
+  }
+  a { color: inherit; }
+  button { font: inherit; color: inherit; cursor: pointer; }
+  :focus-visible { outline: 3px solid var(--orange); outline-offset: 3px; }
+  .wrap { max-width: 1060px; margin: 0 auto; padding: 0 22px; }
+
+  h1, h2, h3, .display { font-family: "Arial Rounded MT Bold", "Trebuchet MS", "Segoe UI", system-ui, sans-serif; line-height: 1.04; letter-spacing: -0.02em; }
+  h1 { font-size: clamp(2.7rem, 8.5vw, 5.4rem); }
+  h2 { font-size: clamp(1.9rem, 4.6vw, 2.9rem); margin-bottom: 10px; }
+  h3 { font-size: 1.2rem; letter-spacing: -0.01em; }
+  .lead { font-size: 1.15rem; max-width: 46ch; color: var(--muted); margin: 18px 0 28px; }
+  .sub { color: var(--muted); max-width: 54ch; margin-bottom: 28px; }
+
+  /* nav */
+  nav { padding: 18px 0; }
+  nav .wrap { display: flex; justify-content: space-between; align-items: center; gap: 14px; flex-wrap: wrap; }
+  .logo { font-weight: 800; text-decoration: none; font-size: 1.15rem; }
+  nav ul { display: flex; gap: 20px; list-style: none; font-size: .95rem; }
+  nav ul a { text-decoration: none; }
+  nav ul a:hover { text-decoration: underline; text-decoration-color: var(--orange); text-underline-offset: 5px; text-decoration-thickness: 3px; }
+
+  /* buttons */
+  .btn {
+    display: inline-block; padding: 14px 26px; border-radius: 999px;
+    background: var(--orange); color: var(--on-orange); font-weight: 700; text-decoration: none;
+    border: 2px solid var(--line); box-shadow: 4px 4px 0 var(--line); transition: transform .12s, box-shadow .12s;
+  }
+  .btn:hover { transform: translate(2px, 2px); box-shadow: 2px 2px 0 var(--line); }
+  .btn.alt { background: var(--surface); color: var(--ink); }
+  .btn-row { display: flex; gap: 14px; flex-wrap: wrap; }
+
+  /* hero */
+  .hero { padding: 24px 0 70px; }
+  .hero .wrap { display: grid; grid-template-columns: 1.1fr .9fr; gap: 36px; align-items: center; }
+  .tag {
+    display: inline-block; background: var(--purple); color: #fff; font-weight: 700;
+    padding: 6px 16px; border-radius: 999px; font-size: .92rem; margin-bottom: 18px;
+  }
+  .hero h1 { color: var(--ink); }
+  .hero h1 .sip { background: linear-gradient(90deg, var(--purple), var(--orange)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+
+  .stage { position: relative; height: 440px; }
+  .blob {
+    position: absolute; inset: 20px 10px 10px 30px; border-radius: 46% 54% 40% 60% / 55% 45% 55% 45%;
+    background: linear-gradient(150deg, var(--purple), var(--purple-deep));
+  }
+  .blob::after {
+    content: ""; position: absolute; width: 130px; height: 130px; border-radius: 50%;
+    background: var(--orange); right: -18px; top: -18px; opacity: .95;
+  }
+  .stage .phone { position: absolute; width: 175px; }
+  .stage .phone.p1 { left: 8%; top: 56px; transform: rotate(-8deg); }
+  .stage .phone.p2 { right: 6%; top: 18px; transform: rotate(7deg); }
+  .can {
+    position: absolute; left: 36%; bottom: 0; width: 92px; height: 190px; border-radius: 18px 18px 22px 22px;
+    background: linear-gradient(90deg, #ff6a00, #ffb36b 40%, #ff6a00);
+    border: 2px solid var(--line); box-shadow: 4px 4px 0 var(--line); transform: rotate(-3deg);
+    display: grid; place-items: center; overflow: hidden;
+  }
+  .can::before { content: ""; position: absolute; top: 0; left: 0; right: 0; height: 14px; background: #d9d4e6; border-bottom: 2px solid var(--line); }
+  .can span { writing-mode: vertical-rl; transform: rotate(180deg); font-weight: 800; letter-spacing: .12em; color: #3b1272; font-size: 1rem; }
+  .drop { position: absolute; width: 9px; height: 13px; border-radius: 50% 50% 55% 55%; background: rgba(255,255,255,.6); }
+  .drop:nth-child(1) { top: 40px; left: 18px; } .drop:nth-child(2) { top: 80px; right: 16px; }
+  .drop:nth-child(3) { top: 130px; left: 26px; }
+
+  /* phone card */
+  .phone {
+    aspect-ratio: 9 / 16; background: var(--purple-deep); border-radius: 26px; padding: 8px;
+    border: 2px solid var(--line); box-shadow: 5px 5px 0 var(--line);
+    display: block; text-decoration: none; position: relative; width: 100%; text-align: left; transition: transform .15s;
+  }
+  .phone:is(a, button):hover { transform: translateY(-4px); }
+  .screen {
+    width: 100%; height: 100%; border-radius: 19px; overflow: hidden; position: relative;
+    display: flex; flex-direction: column; justify-content: space-between; padding: 14px; color: #fff;
+  }
+  .screen.c1 { background: linear-gradient(160deg, #ff7a1a, #ffb36b); color: #2b0f55; }
+  .screen.c2 { background: linear-gradient(160deg, #5b21b6, #a05bff); }
+  .screen.c3 { background: linear-gradient(160deg, #ff7a1a, #b0206b); }
+  .screen.c4 { background: linear-gradient(160deg, #3b1272, #7a3cff); }
+  .screen.c5 { background: linear-gradient(160deg, #a05bff, #ff7a1a); }
+  .screen img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+  .screen > * { position: relative; }
+  .cat { align-self: flex-start; background: rgba(255,255,255,.88); color: #2b0f55; font-weight: 700; font-size: .72rem; padding: 3px 10px; border-radius: 999px; }
+  .hook { font-weight: 800; font-size: .98rem; line-height: 1.2; text-shadow: 0 1px 8px rgba(0,0,0,.25); }
+  .screen.c1 .hook { text-shadow: none; }
+  .soon { font-size: .72rem; margin-top: 6px; opacity: .92; }
+  .play {
+    position: absolute !important; top: 50%; left: 50%; transform: translate(-50%, -50%);
+    width: 52px; height: 52px; border-radius: 50%; background: rgba(255,255,255,.92); display: grid; place-items: center;
+  }
+  .play::after { content: ""; border-left: 15px solid #2b0f55; border-top: 9px solid transparent; border-bottom: 9px solid transparent; margin-left: 4px; }
+
+  /* sections */
+  section { padding: 60px 0; }
+  .filters { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 30px; }
+  .filter {
+    padding: 8px 18px; border-radius: 999px; border: 2px solid var(--line); background: var(--surface); font-weight: 600; font-size: .92rem;
+  }
+  .filter[aria-pressed="true"] { background: var(--purple); color: #fff; }
+  .samples { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 30px 22px; }
+  .sample p { margin-top: 14px; font-weight: 700; }
+  .sample small { color: var(--muted); }
+
+  .about { display: grid; grid-template-columns: 220px 1fr; gap: 38px; align-items: center; }
+  .photo {
+    aspect-ratio: 1; border-radius: 50%; border: 2px solid var(--line); box-shadow: 5px 5px 0 var(--line);
+    background: var(--orange); display: grid; place-items: center; overflow: hidden;
+    color: var(--on-orange); font-weight: 800; font-size: 3.4rem; font-family: "Arial Rounded MT Bold", "Trebuchet MS", sans-serif;
+  }
+  .photo img { width: 100%; height: 100%; object-fit: cover; }
+  .chips { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 18px; }
+  .chip { padding: 6px 14px; border-radius: 999px; border: 2px solid var(--line); background: var(--surface); font-size: .92rem; }
+
+  .rates { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 24px; }
+  .rate {
+    background: var(--surface); border: 2px solid var(--line); border-radius: 22px; padding: 26px;
+    box-shadow: 5px 5px 0 var(--line); display: flex; flex-direction: column; gap: 8px;
+  }
+  .rate.best { background: var(--purple); color: #fff; }
+  .rate.best .price small, .rate.best li { color: #e8dcff; }
+  .price { font-family: "Arial Rounded MT Bold", "Trebuchet MS", sans-serif; font-size: 2rem; letter-spacing: -0.02em; }
+  .price small { font-size: .9rem; color: var(--muted); font-family: inherit; letter-spacing: 0; }
+  .rate ul { list-style: none; margin-top: 6px; }
+  .rate li { padding-left: 22px; position: relative; font-size: .95rem; color: var(--muted); }
+  .rate li::before { content: "✓"; position: absolute; left: 0; color: var(--orange); font-weight: 800; }
+  .extras { margin-top: 26px; color: var(--muted); }
+
+  .contact { text-align: center; }
+  .contact-card {
+    background: var(--purple-deep); color: #fff; border-radius: 34px; padding: 56px 24px;
+    border: 2px solid var(--line); box-shadow: 6px 6px 0 var(--orange);
+  }
+  .contact-card .lead { color: #d9c8ff; margin-left: auto; margin-right: auto; }
+  .contact-card .btn-row { justify-content: center; }
+  .contact-card .btn.alt { background: transparent; color: #fff; border-color: #fff; box-shadow: 4px 4px 0 var(--orange); }
+  footer { padding: 34px 0 50px; text-align: center; color: var(--muted); font-size: .9rem; }
+
+  /* video modal */
+  dialog { border: 2px solid var(--line); border-radius: 22px; padding: 0; background: var(--purple-deep); max-width: min(92vw, 380px); width: 100%; }
+  dialog::backdrop { background: rgba(20, 5, 45, .7); }
+  dialog video { width: 100%; display: block; max-height: 80vh; background: #000; }
+  .close { position: absolute; top: 8px; right: 8px; z-index: 2; border: 0; border-radius: 999px; background: #fff; color: #2b0f55; font-weight: 800; width: 36px; height: 36px; }
+
+  @media (max-width: 780px) {
+    .hero .wrap { grid-template-columns: 1fr; }
+    .stage { height: 360px; order: -1; }
+    .stage .phone { width: 140px; }
+    .can { width: 72px; height: 150px; }
+    .about { grid-template-columns: 1fr; justify-items: start; }
+    .photo { width: 150px; }
+    nav ul { gap: 14px; }
+  }
+  @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } * { transition: none !important; } }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="wrap">
+    <a class="logo" href="#top" id="navName">Your Name</a>
+    <ul>
+      <li><a href="#work">Work</a></li>
+      <li><a href="#about">About</a></li>
+      <li><a href="#rates">Rates</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </div>
+</nav>
+
+<header class="hero" id="top">
+  <div class="wrap">
+    <div>
+      <span class="tag" id="location"></span>
+      <h1 id="headline"></h1>
+      <p class="lead" id="intro"></p>
+      <div class="btn-row">
+        <a class="btn" href="#work">See my work</a>
+        <a class="btn alt" href="#contact">Hire me</a>
+      </div>
+    </div>
+    <div class="stage" aria-hidden="true">
+      <div class="blob"></div>
+      <div id="heroPhones"></div>
+      <div class="can"><i class="drop"></i><i class="drop"></i><i class="drop"></i><span id="canText">ZOBO</span></div>
+    </div>
+  </div>
+</header>
+
+<section id="work">
+  <div class="wrap">
+    <h2>My work</h2>
+    <p class="sub" id="workSub"></p>
+    <div class="filters" id="filters" role="group" aria-label="Filter by niche"></div>
+    <div class="samples" id="samples"></div>
+  </div>
+</section>
+
+<section id="about">
+  <div class="wrap about">
+    <div class="photo" id="photo"></div>
+    <div>
+      <h2>About me</h2>
+      <p id="aboutText" style="max-width:56ch"></p>
+      <div class="chips" id="chips"></div>
+    </div>
+  </div>
+</section>
+
+<section id="rates">
+  <div class="wrap">
+    <h2>Services and rates</h2>
+    <p class="sub">Clear prices, no surprises. Foreign brands can pay in dollars, Nigerian brands in naira.</p>
+    <div class="rates" id="ratesGrid"></div>
+    <p class="extras" id="extras"></p>
+  </div>
+</section>
+
+<section class="contact" id="contact">
+  <div class="wrap">
+    <div class="contact-card">
+      <h2>Let's make your next ad</h2>
+      <p class="lead">Tell me about your product and who it's for. I'll reply within 24 hours.</p>
+      <div class="btn-row" id="contactBtns"></div>
+    </div>
+  </div>
+</section>
+
+<footer><div class="wrap"><span id="footerName"></span> · UGC creator, Nigeria</div></footer>
+
+<dialog id="player" aria-label="Video player">
+  <button class="close" id="closePlayer" aria-label="Close video">✕</button>
+  <video id="playerVideo" controls playsinline></video>
+</dialog>
+
+<script>
+/* ==================================================================
+   EDIT THIS BLOCK ONLY. The whole page updates from it.
+   ================================================================== */
+const SITE = {
+  name: "Your Name",
+  initials: "YN",
+  photoUrl: "",                          // link to your photo, or leave empty
+  location: "UGC creator in Lagos, Nigeria",
+  headline: "Real videos that make people want a sip, a swipe, or a buy.",
+  intro: "I make honest drink, skincare, and lifestyle content for brands: reviews, taste tests, unboxings, and ready-to-run ads.",
+  canText: "ZOBO",                        // text on the drink can in the hero
+  workNote: "Starting out? These are sample concepts I'm filming. Real videos replace them as I add them.",
+  about: "Hi, I'm Your Name, a Nigerian UGC creator who loves drinks, skincare, and everyday lifestyle products. I make scroll-stopping reviews, taste tests, and problem-solution videos that feel real and help brands sell. Available for TikTok, Instagram, and ad content.",
+  skills: ["Taste tests", "Product reviews", "Unboxings", "Get Ready With Me", "Captions and editing", "Voiceovers", "TikTok and Reels"],
+
+  /* SAMPLES
+     cat   : Drinks, Skincare, Hair, or Food (filter buttons are made from these)
+     hook  : the first line you say in the video (shown on the card until you add a video)
+     video : file path to an mp4 next to this file, e.g. "videos/zobo.mp4"  (plays on the page)
+     link  : OR a link to the video on YouTube / TikTok / Instagram / Google Drive
+     thumb : optional cover image link or path
+     Leave video and link empty and the card shows as "concept coming soon". */
+  samples: [
+    { cat: "Drinks",   title: "Zobo taste test",        label: "Taste test, 25s",       hook: "I tried this zobo so you don't have to",      video: "", link: "", thumb: "" },
+    { cat: "Drinks",   title: "Chapman for a hot day",  label: "Product review, 30s",   hook: "The only drink I want in this Lagos heat",    video: "", link: "", thumb: "" },
+    { cat: "Drinks",   title: "Smoothie in 3 steps",    label: "How-to, 30s",           hook: "Watch this get made in 20 seconds",           video: "", link: "", thumb: "" },
+    { cat: "Drinks",   title: "Energy drink review",    label: "Honest review, 35s",    hook: "Does this really keep you awake? Let's see",  video: "", link: "", thumb: "" },
+    { cat: "Skincare", title: "Skincare review",        label: "Review, 30s",           hook: "I didn't expect this to work, but...",        video: "", link: "", thumb: "" },
+    { cat: "Skincare", title: "Problem and solution",   label: "Problem-solution, 35s", hook: "If your skin does this, watch till the end",  video: "", link: "", thumb: "" },
+    { cat: "Hair",     title: "Get Ready With Me",      label: "GRWM, 40s",             hook: "My 5-minute hair routine, no stress",         video: "", link: "", thumb: "" },
+    { cat: "Food",     title: "Unboxing a delivery",    label: "Unboxing, 25s",         hook: "Opening my order so you can see before you buy", video: "", link: "", thumb: "" }
+  ],
+
+  rates: [
+    { name: "Single video", price: "₦15,000", alt: "or $50", best: false,
+      items: ["1 video, up to 30 seconds", "Captions included", "1 free revision", "Delivered in 3 to 5 days"] },
+    { name: "3-video bundle", price: "₦40,000", alt: "or $130", best: true,
+      items: ["3 videos with different hooks", "Captions included", "2 free revisions", "Best value for testing ads"] },
+    { name: "Monthly pack", price: "₦90,000", alt: "or $300", best: false,
+      items: ["8 videos a month", "Content planned with you", "Priority replies", "Raw footage included"] }
+  ],
+  extras: "Add-ons priced separately: raw footage, extra revisions, rush delivery, and ad usage rights.",
+
+  email: "",
+  whatsapp: "",                          // digits only with country code, e.g. 2348012345678
+  instagram: "",                         // handle without @
+  tiktok: ""                             // handle without @
+};
+/* ================================================================== */
+
+const $ = id => document.getElementById(id);
+const esc = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+
+document.title = SITE.name + " | UGC Creator";
+$("navName").textContent = SITE.name;
+$("footerName").textContent = SITE.name;
+$("location").textContent = SITE.location;
+$("headline").textContent = SITE.headline;
+$("intro").textContent = SITE.intro;
+$("canText").textContent = SITE.canText;
+$("workSub").textContent = SITE.workNote;
+$("aboutText").textContent = SITE.about;
+$("extras").textContent = SITE.extras;
+
+if (SITE.photoUrl) $("photo").innerHTML = '<img src="' + esc(SITE.photoUrl) + '" alt="' + esc(SITE.name) + '">';
+else $("photo").textContent = SITE.initials;
+
+$("chips").innerHTML = SITE.skills.map(s => '<span class="chip">' + esc(s) + '</span>').join("");
+
+function card(s, i) {
+  const live = s.video || s.link;
+  const tag = s.video ? "button" : (s.link ? "a" : "div");
+  const attrs = s.video ? ' type="button" data-video="' + esc(s.video) + '"'
+              : s.link ? ' href="' + esc(s.link) + '" target="_blank" rel="noopener"' : "";
+  return '<' + tag + ' class="phone"' + attrs + ' aria-label="' + esc(s.title) + '">' +
+    '<span class="screen c' + ((i % 5) + 1) + '">' +
+    (s.thumb ? '<img src="' + esc(s.thumb) + '" alt="">' : "") +
+    '<span class="cat">' + esc(s.cat) + '</span>' +
+    (live ? '<span class="play"></span>' : "") +
+    '<span><span class="hook">"' + esc(s.hook) + '"</span>' +
+    (live ? "" : '<span class="soon" style="display:block">Concept, video coming soon</span>') + '</span>' +
+    '</span></' + tag + '>';
+}
+
+// hero phones: prefer the first two drink samples
+const heroPick = SITE.samples.filter(s => s.cat === "Drinks").concat(SITE.samples).slice(0, 2);
+$("heroPhones").innerHTML = heroPick.map((s, i) =>
+  card(s, i).replace('class="phone"', 'class="phone p' + (i + 1) + '"')).join("");
+
+// filters
+const cats = ["All"].concat([...new Set(SITE.samples.map(s => s.cat))]);
+let active = "All";
+function draw() {
+  $("filters").innerHTML = cats.map(c =>
+    '<button class="filter" type="button" aria-pressed="' + (c === active) + '" data-cat="' + esc(c) + '">' + esc(c) + '</button>').join("");
+  $("samples").innerHTML = SITE.samples
+    .map((s, i) => ({ s, i }))
+    .filter(o => active === "All" || o.s.cat === active)
+    .map(o => '<div class="sample">' + card(o.s, o.i) + '<p>' + esc(o.s.title) + '</p><small>' + esc(o.s.label) + '</small></div>').join("");
+}
+draw();
+$("filters").addEventListener("click", e => {
+  const b = e.target.closest("[data-cat]"); if (!b) return;
+  active = b.dataset.cat; draw();
+});
+
+// video player
+const dlg = $("player"), vid = $("playerVideo");
+document.addEventListener("click", e => {
+  const b = e.target.closest("[data-video]");
+  if (b && dlg.showModal) { vid.src = b.dataset.video; dlg.showModal(); vid.play().catch(() => {}); }
+});
+function stop() { vid.pause(); vid.removeAttribute("src"); vid.load(); }
+$("closePlayer").addEventListener("click", () => dlg.close());
+dlg.addEventListener("close", stop);
+dlg.addEventListener("click", e => { if (e.target === dlg) dlg.close(); });
+
+$("ratesGrid").innerHTML = SITE.rates.map(r =>
+  '<div class="rate' + (r.best ? ' best' : '') + '"><h3>' + esc(r.name) + '</h3>' +
+  '<div class="price">' + esc(r.price) + ' <small>' + esc(r.alt) + '</small></div>' +
+  '<ul>' + r.items.map(t => '<li>' + esc(t) + '</li>').join("") + '</ul></div>').join("");
+
+const btns = [];
+if (SITE.whatsapp) btns.push('<a class="btn" href="https://wa.me/' + esc(SITE.whatsapp) + '" target="_blank" rel="noopener">Message on WhatsApp</a>');
+if (SITE.email) btns.push('<a class="btn alt" href="mailto:' + esc(SITE.email) + '">Email me</a>');
+if (SITE.instagram) btns.push('<a class="btn alt" href="https://instagram.com/' + esc(SITE.instagram) + '" target="_blank" rel="noopener">Instagram</a>');
+if (SITE.tiktok) btns.push('<a class="btn alt" href="https://tiktok.com/@' + esc(SITE.tiktok) + '" target="_blank" rel="noopener">TikTok</a>');
+if (!btns.length) btns.push('<span class="chip" style="color:#2b0f55">Add your WhatsApp, email, or Instagram in the SITE block</span>');
+$("contactBtns").innerHTML = btns.join("");
+</script>
+</body>
+</html>
